@@ -71,26 +71,37 @@ Evaluated on nuScenes v1.0-mini validation split:
 ![Architecture](assets/architecture.svg)
 
 The SynapseNexusPredictor assembles 10 neural modules in a novel intent-gated pipeline:
+
+```text
 INPUT
 ├── Agent History:    4 timesteps × 6 features (x, y, vx, vy, sin_h, cos_h)
 ├── Neighbours:       up to 10 × 4 timesteps × 4 features (relative)
-└── BEV Map Raster:   3 channels × 100×100 pixels (walkway/crossing/drivable)STAGE 1 — ENCODING
+└── BEV Map Raster:   3 channels × 100×100 pixels (walkway/crossing/drivable)
+
+STAGE 1 — ENCODING
 ├── AgentEncoder (GRU 2-layer, 256d)      → ego token
 ├── NeighbourEncoder (shared GRU, 256d)   → N neighbour tokens
 ├── SocialAttention (MultiheadAttn, 4 heads) → social context + attention weights
 ├── MapEncoder (CNN 5-layer, 256d)        → map context
-└── ContextFusion (concat + MLP)          → 256d unified contextSTAGE 2 — INTENT GATE ★ NOVEL
+└── ContextFusion (concat + MLP)          → 256d unified context
+
+STAGE 2 — INTENT GATE ★ NOVEL
 └── IntentClassifier (MLP + Embedding)
-→ 4-class logits: [Continue | Cross Road | Turn | Stop]
-→ 32d intent embedding (conditions decoder)STAGE 3 — GOAL + TRAJECTORY
+    → 4-class logits: [Continue | Cross Road | Turn | Stop]
+    → 32d intent embedding (conditions decoder)
+
+STAGE 3 — GOAL + TRAJECTORY
 ├── GoalPredictor → K=3 endpoint hypotheses in agent frame
 ├── TrajectoryDecoder (GRU cell, goal+intent conditioned)
 │   → K=3 × 6 × 2 trajectory coordinates
 │   → Endpoint correction enforces goal consistency
-└── OccupancyScorer ★ NOVEL → map plausibility scores (B, K)OUTPUT
+└── OccupancyScorer ★ NOVEL → map plausibility scores (B, K)
+
+OUTPUT
 ├── 3 trajectories with probabilities
 ├── Intent label (human-readable)
 └── Attention weights (for visualization)
+```
 
 **Total parameters: 1,029,902 (~4MB ONNX)**
 
@@ -113,16 +124,18 @@ INPUT
 Download: https://www.nuscenes.org/nuscenes#download
 
 Expected folder structure after download:
+```text
 data/nuscenes/
 ├── maps/          ← 4 PNG map files
 ├── samples/       ← sensor data (not used by model)
 ├── sweeps/        ← sensor sweeps (not used by model)
 └── v1.0-mini/     ← annotation JSONs (required)
-├── attribute.json
-├── instance.json
-├── sample_annotation.json
-├── scene.json
-└── ... (12 JSON files total)
+    ├── attribute.json
+    ├── instance.json
+    ├── sample_annotation.json
+    ├── scene.json
+    └── ... (12 JSON files total)
+```
 > Note: Only `maps/` and `v1.0-mini/` are required. 
 > `samples/` and `sweeps/` can be omitted to save ~4GB.
 
@@ -161,7 +174,9 @@ pip install fastapi uvicorn pyjwt python-dotenv pydantic
 
 ### 5. Configure Environment
 Create `synapse-nexus-web/.env.local`:
+```text
 NEXT_PUBLIC_API_URL=http://localhost:8000
+```
 
 ---
 
@@ -180,6 +195,7 @@ python train.py --resume checkpoints/best.pt
 ```
 
 Training output (per 5 epochs):
+```text
 Epoch 40/80 | Time: 2.8s
 Train Loss: 2.0434
 Val minADE_3:  0.623
@@ -187,6 +203,7 @@ Val minFDE_3:  0.891
 Val MissRate:  0.089
 Val OffRoadRate: 0.124
 ✓ New best checkpoint saved (FDE: 0.891)
+```
 
 ### Evaluate the Model
 ```bash
@@ -228,6 +245,7 @@ npm run dev
 ---
 
 ## 📁 Repository Structure
+```text
 synapse-nexus-trajectory/
 │
 ├── 🤖 AI Training Pipeline
@@ -256,10 +274,11 @@ synapse-nexus-trajectory/
 │   └── assets/metrics.svg
 │
 └── 📊 Outputs (generated after training)
-├── checkpoints/best.pt
-├── outputs/results.json
-├── outputs/training_history.json
-└── outputs/viz/trajectory_predictions.png
+    ├── checkpoints/best.pt
+    ├── outputs/results.json
+    ├── outputs/training_history.json
+    └── outputs/viz/trajectory_predictions.png
+```
 
 ---
 
