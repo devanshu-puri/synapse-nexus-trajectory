@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
 
@@ -10,15 +10,21 @@ export default function ProtectedRoute({
   children: React.ReactNode
 }) {
   const router = useRouter()
-  const { isAuthenticated } = useAuthStore()
+  const { isAuthenticated, token } = useAuthStore()
+  const [isHydrated, setIsHydrated] = useState(false)
+
+  // Wait for hydration to complete (zustand/persist)
+  useEffect(() => {
+    setIsHydrated(true)
+  }, [])
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (isHydrated && !isAuthenticated && !token) {
       router.push('/auth')
     }
-  }, [isAuthenticated, router])
+  }, [isHydrated, isAuthenticated, token, router])
 
-  if (!isAuthenticated) {
+  if (!isHydrated || (!isAuthenticated && !token)) {
     return (
       <div className="min-h-screen bg-primary flex items-center justify-center">
         <div className="text-center">
@@ -26,7 +32,7 @@ export default function ProtectedRoute({
             className="w-8 h-8 border-2 border-amber border-t-transparent rounded-full animate-spin mx-auto mb-4"
           />
           <p className="text-textsecondary font-mono-data text-sm">
-            Verifying credentials...
+            Verifying secure session...
           </p>
         </div>
       </div>

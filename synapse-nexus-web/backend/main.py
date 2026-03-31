@@ -14,12 +14,17 @@ from auth import (
 
 app = FastAPI(title="Synapse Nexus API")
 
-# Configure CORS dynamically from env
-cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://localhost:3001").split(",")
-
+# CORS — allow localhost + production frontend URL
+frontend_url = os.getenv("FRONTEND_URL", "https://synapse-nexus.vercel.app")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=cors_origins,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:3000",
+        frontend_url,
+        "https://synapse-nexus-trajectory.vercel.app", # Secondary backup URL
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

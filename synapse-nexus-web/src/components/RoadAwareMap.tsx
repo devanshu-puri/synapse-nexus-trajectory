@@ -98,7 +98,7 @@ function buildRouteGeoJSON(plannedRoute: string[]) {
   }
 }
 
-const EMPTY_FC = { type: 'FeatureCollection' as const, features: [] as any[] }
+const EMPTY_FC: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] }
 
 export default function RoadAwareMap({ className = '' }: { className?: string }) {
   const mapContainer = useRef<HTMLDivElement>(null)
@@ -168,11 +168,13 @@ export default function RoadAwareMap({ className = '' }: { className?: string })
         id: 'road-surface',
         type: 'line',
         source: 'roads',
+        layout: {
+          'line-cap': 'round',
+          'line-join': 'round',
+        },
         paint: {
           'line-color': '#1E2A3A',
           'line-width': ['match', ['get', 'type'], 'highway', 12, 'arterial', 9, 6],
-          'line-cap': 'round',
-          'line-join': 'round',
         },
       })
       // Lane center dashes
@@ -361,6 +363,16 @@ export default function RoadAwareMap({ className = '' }: { className?: string })
   useEffect(() => {
     const m = map.current
     if (!m || !mapLoaded || !m.isStyleLoaded()) return
+
+    // Ego route
+    ;(m.getSource('ego-route') as maplibregl.GeoJSONSource)?.setData(
+      buildRouteGeoJSON(egoVehicle.plannedRoute)
+    )
+
+    // Intersections
+    ;(m.getSource('intersections') as maplibregl.GeoJSONSource)?.setData(
+      buildIntersectionGeoJSON()
+    )
 
     // Ego
     ;(m.getSource('ego') as maplibregl.GeoJSONSource)?.setData({

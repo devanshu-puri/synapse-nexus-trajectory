@@ -8,7 +8,7 @@ from fastapi import HTTPException, Header
 # Load JWT configs from environments
 JWT_SECRET = os.getenv("JWT_SECRET", "synapse-nexus-secret-key-2025")
 JWT_EXPIRY_DAYS = int(os.getenv("JWT_EXPIRY_DAYS", "7"))
-USERS_FILE = "users.json"
+USERS_FILE = os.path.join(os.path.dirname(__file__), "users.json")
 
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
