@@ -1,0 +1,59 @@
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #080B14;
+  --color-secondary: #0D1117;
+  --color-elevated: #161B27;
+  --color-amber: #F5A623;
+  --color-green: #00FF88;
+  --color-danger: #FF3B3B;
+  --color-blue: #4A9EFF;
+  --color-textprimary: #E8EDF5;
+  --color-textsecondary: #8892A4;
+  --color-muted: #4A5568;
+  --color-border: #1E2535;
+  --color-brightborder: #2D3748;
+
+  --font-clash: 'Clash Display', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --font-size-hero: clamp(3rem, 8vw, 7rem);
+  --font-size-section: clamp(2rem, 4vw, 3.5rem);
+}
+
+@layer base {
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #080B14;
+    color: #E8EDF5;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Clash Display', sans-serif;
+  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0D1117; }
+  ::-webkit-scrollbar-thumb { background: #2D3748; border-radius: 3px; }
+  ::selection { background: #F5A623; color: #080B14; }
+}
+
+@layer utilities {
+  .font-clash { font-family: 'Clash Display', sans-serif; }
+  .font-mono-data { font-family: 'JetBrains Mono', monospace; }
+  .amber-glow { box-shadow: 0 0 20px rgba(245, 166, 35, 0.3); }
+  .amber-glow-sm { box-shadow: 0 0 10px rgba(245, 166, 35, 0.2); }
+  .green-glow { box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); }
+  .red-glow { box-shadow: 0 0 20px rgba(255, 59, 59, 0.3); }
+  .border-amber-accent { border-left: 2px solid #F5A623; }
+  .text-gradient-amber {
+    background: linear-gradient(135deg, #F5A623, #FFD700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}

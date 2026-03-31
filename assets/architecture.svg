@@ -1,0 +1,66 @@
+<svg width="900" height="400" viewBox="0 0 900 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="400" fill="#080B14"/>
+  
+  <!-- Helper: Regular Box Style -->
+  <defs>
+    <style>
+      .box { fill: #0D1117; stroke: #2D3748; stroke-width: 1; }
+      .novel { fill: rgba(245, 166, 35, 0.1); stroke: #F5A623; stroke-width: 1.5; }
+      .text { fill: white; font-family: Segoe UI, Arial; font-size: 12px; font-weight: 500; }
+      .novel-text { fill: #F5A623; font-family: Segoe UI, Arial; font-size: 12px; font-weight: bold; }
+      .arrow { stroke: #F5A623; stroke-width: 1.5; marker-end: url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#F5A623" />
+    </marker>
+  </defs>
+
+  <!-- Level 1: Inputs -->
+  <rect x="50" y="30" width="160" height="40" class="box" />
+  <text x="130" y="55" class="text" text-anchor="middle">Agent History 4×6</text>
+
+  <rect x="370" y="30" width="160" height="40" class="box" />
+  <text x="450" y="55" class="text" text-anchor="middle">Neighbours 10×4×4</text>
+
+  <rect x="690" y="30" width="160" height="40" class="box" />
+  <text x="770" y="55" class="text" text-anchor="middle">BEV Map 3×100×100</text>
+
+  <!-- Level 2: Encoders -->
+  <line x1="130" y1="70" x2="130" y2="100" class="arrow" />
+  <rect x="50" y="100" width="160" height="40" class="box" />
+  <text x="130" y="125" class="text" text-anchor="middle">GRU Ego Encoder</text>
+
+  <line x1="450" y1="70" x2="450" y2="100" class="arrow" />
+  <rect x="370" y="100" width="160" height="40" class="novel" />
+  <text x="450" y="125" class="novel-text" text-anchor="middle">Social Attention ★</text>
+
+  <line x1="770" y1="70" x2="770" y2="100" class="arrow" />
+  <rect x="690" y="100" width="160" height="40" class="box" />
+  <text x="770" y="125" class="text" text-anchor="middle">Map CNN Encoder</text>
+
+  <!-- Level 3: Fusion -->
+  <line x1="130" y1="140" x2="440" y2="170" class="arrow" />
+  <line x1="450" y1="140" x2="450" y2="170" class="arrow" />
+  <line x1="770" y1="140" x2="460" y2="170" class="arrow" />
+  
+  <rect x="350" y="170" width="200" height="40" class="box" />
+  <text x="450" y="195" class="text" text-anchor="middle">Context Fusion</text>
+
+  <!-- Level 4: Intent Gate -->
+  <line x1="450" y1="210" x2="450" y2="240" class="arrow" />
+  <rect x="350" y="240" width="200" height="40" class="novel" />
+  <text x="450" y="265" class="novel-text" text-anchor="middle">Intent Classifier Gate ★</text>
+
+  <!-- Level 5: Goal & Decoder -->
+  <line x1="450" y1="280" x2="450" y2="310" class="arrow" />
+  <rect x="350" y="310" width="200" height="40" class="box" />
+  <text x="450" y="335" class="text" text-anchor="middle">Goal Predictor + GRU Decoder</text>
+
+  <!-- Level 6: Safety Filter -->
+  <line x1="410" y1="350" x2="410" y2="380" class="arrow" />
+  <line x1="490" y1="350" x2="490" y2="380" class="arrow" />
+  <rect x="350" y="360" width="200" height="30" class="novel" />
+  <text x="450" y="378" class="novel-text" text-anchor="middle">Occupancy Scorer ★</text>
+
+  <text x="720" y="380" class="text" font-style="italic">Output: 3 Trajectories + Probabilities</text>
+</svg>

@@ -1,0 +1,18 @@
+{
+  "9e849773-f384-4574-a62f-91976cb2afe7": {
+    "id": "9e849773-f384-4574-a62f-91976cb2afe7",
+    "name": "dev",
+    "email": "dev@gmail.com",
+    "password": "c6f5b541d28b0c7c4e6b63f81ccceb6faec8df04c3793c39e2937d5b34f1d9e5",
+    "role": "engineer",
+    "created_at": "2026-03-30T10:17:37.359504"
+  },
+  "040c8d07-35ff-4b5b-bd2c-e143c4cc2769": {
+    "id": "040c8d07-35ff-4b5b-bd2c-e143c4cc2769",
+    "name": "dev1",
+    "email": "dev1@gmail.com",
+    "password": "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
+    "role": "driver",
+    "created_at": "2026-03-30T13:05:57.661912"
+  }
+}

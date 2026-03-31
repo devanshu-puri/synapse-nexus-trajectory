@@ -1,0 +1,31 @@
+<svg width="1200" height="300" viewBox="0 0 1200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#080B14;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0D1117;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="300" fill="url(#grad)"/>
+  
+  <text x="60" y="140" fill="#F5A623" font-family="Arial Black, Impact, sans-serif" font-size="64" font-weight="bold">SYNAPSE NEXUS AI</text>
+  <text x="60" y="190" fill="white" font-family="Segoe UI, Arial" font-size="24" opacity="0.8">Intent-First Trajectory Prediction Platform</text>
+  
+  <!-- Right side BEV appx -->
+  <g transform="translate(850, 50) rotate(15)">
+    <rect x="0" y="0" width="200" height="200" rx="10" fill="#0D1117" stroke="#2D3748" stroke-width="2"/>
+    <path d="M100 180 L100 80 Q100 40 140 20" stroke="#F5A623" stroke-width="3" fill="none" opacity="0.9" stroke-dasharray="5,5" />
+    <path d="M110 180 L110 100 Q110 70 80 50" stroke="#4A9EFF" stroke-width="2" fill="none" opacity="0.6" />
+    <circle cx="100" cy="180" r="8" fill="#FFFFFF" />
+    <circle cx="140" cy="20" r="6" fill="#F5A623" />
+  </g>
+
+  <!-- Bottom Strip -->
+  <rect x="0" y="260" width="1200" height="40" fill="rgba(245, 166, 35, 0.05)"/>
+  <line x1="0" y1="260" x2="1200" y2="260" stroke="#F5A623" stroke-width="1" opacity="0.3" />
+  
+  <text x="200" y="285" fill="#F5A623" font-family="Courier New, monospace" font-size="14" text-anchor="middle">&lt; 20ms Inference</text>
+  <line x1="400" y1="270" x2="400" y2="290" stroke="#F5A623" opacity="0.3" />
+  <text x="600" y="285" fill="#F5A623" font-family="Courier New, monospace" font-size="14" text-anchor="middle">3s Prediction Window</text>
+  <line x1="800" y1="270" x2="800" y2="290" stroke="#F5A623" opacity="0.3" />
+  <text x="950" y="285" fill="#F5A623" font-family="Courier New, monospace" font-size="14" text-anchor="middle">K=3 Modes</text>
+</svg>

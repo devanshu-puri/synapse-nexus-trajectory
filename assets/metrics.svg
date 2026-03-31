@@ -1,0 +1,27 @@
+<svg width="800" height="120" viewBox="0 0 800 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="120" fill="#080B14"/>
+  
+  <!-- Card 1 -->
+  <rect x="20" y="20" width="180" height="80" rx="4" fill="#0D1117" stroke="#2D3748"/>
+  <text x="32" y="44" fill="white" font-family="Arial" font-size="12">minADE</text>
+  <text x="32" y="76" fill="#F5A623" font-family="Courier New" font-size="24" font-weight="bold">0.298m</text>
+  <circle cx="178" cy="40" r="4" fill="#00FF88"/>
+
+  <!-- Card 2 -->
+  <rect x="215" y="20" width="180" height="80" rx="4" fill="#0D1117" stroke="#2D3748"/>
+  <text x="227" y="44" fill="white" font-family="Arial" font-size="12">minFDE</text>
+  <text x="227" y="76" fill="#F5A623" font-family="Courier New" font-size="24" font-weight="bold">0.491m</text>
+  <circle cx="373" cy="40" r="4" fill="#00FF88"/>
+
+  <!-- Card 3 -->
+  <rect x="410" y="20" width="180" height="80" rx="4" fill="#0D1117" stroke="#2D3748"/>
+  <text x="422" y="44" fill="white" font-family="Arial" font-size="12">MissRate</text>
+  <text x="422" y="76" fill="#F5A623" font-family="Courier New" font-size="24" font-weight="bold">4.1%</text>
+  <circle cx="568" cy="40" r="4" fill="#00FF88"/>
+
+  <!-- Card 4 -->
+  <rect x="605" y="20" width="175" height="80" rx="4" fill="#0D1117" stroke="#2D3748"/>
+  <text x="617" y="44" fill="white" font-family="Arial" font-size="12">OffRoad</text>
+  <text x="617" y="76" fill="#F5A623" font-family="Courier New" font-size="24" font-weight="bold">0.02</text>
+  <circle cx="758" cy="40" r="4" fill="#00FF88"/>
+</svg>
