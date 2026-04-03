@@ -15,7 +15,7 @@
 
 **Built for the Harman Ignite Computer Vision Challenge — Problem Statement 1**
 
-[🚀 Live Demo](#live-demo) • [📊 Results](#evaluation-results) • [🏗️ Architecture](#model-architecture) • [⚙️ Setup](#setup--installation)
+[🚀 Live Demo](#-live-demo) • [📊 Results](#-evaluation-results) • [🏗️ Architecture](#️-model-architecture) • [⚙️ Setup](#️-setup--installation)
 
 </div>
 
@@ -23,9 +23,10 @@
 
 ## 🏆 Why Synapse Nexus Wins
 
-> **Every other team predicts WHERE. We predict WHY — then WHERE.**
+> **Conventional predictors ask: *where will this agent be?***
+> **Synapse Nexus asks: *what is this agent trying to do?* — then derives where they'll be.**
 
-The core insight that makes us different: classifying **agent intent** (Continue / Cross Road / Turn / Stop) BEFORE decoding trajectories dramatically constrains the search space and produces physically plausible, map-aware predictions.
+The decisive architectural insight: an explicit **intent classification gate** (Continue / Cross Road / Turn / Stop) runs *before* trajectory decoding. Conditioning the GRU decoder on both a predicted goal endpoint *and* a discrete intent class constrains the hypothesis space to physically plausible, semantically consistent futures. The result is a system that doesn't just extrapolate motion — it reasons about purpose.
 
 | What Others Do | What We Do |
 |---|---|
@@ -46,6 +47,23 @@ Using `F.grid_sample`, we differentiably sample map walkability at every predict
 
 **3. OccupancyScorer Re-ranking**
 After trajectory decoding, a lightweight MLP scores each of K=3 modes against the map feature vector. Impossible trajectories are penalized at inference time — not just during training. This is the first such two-stage safety filter in this class of predictor.
+
+---
+
+## 🚀 Live Demo
+
+| Service | URL | Status |
+|---|---|---|
+| **Web Platform** | [synapse-nexus-trajectory.vercel.app](https://synapse-nexus-trajectory.vercel.app) | ![Vercel](https://img.shields.io/badge/Vercel-Live-brightgreen?style=flat-square&logo=vercel) |
+| **REST API** | [synapse-nexus-trajectory.onrender.com](https://synapse-nexus-trajectory.onrender.com) | ![Render](https://img.shields.io/badge/Render-Live-brightgreen?style=flat-square&logo=render) |
+| **API Docs** | [/docs](https://synapse-nexus-trajectory.onrender.com/docs) | Swagger UI |
+
+**Demo credentials** (or create your own account via Sign Up):
+
+| Role | Email | Password |
+|---|---|---|
+| Engineer | `dev@gmail.com` | `password123` |
+| Driver | `dev1@gmail.com` | `12345678` |
 
 ---
 
