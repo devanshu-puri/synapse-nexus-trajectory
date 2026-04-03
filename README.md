@@ -21,32 +21,25 @@
 
 ---
 
-## 🏆 Why Synapse Nexus Wins
+## 🏆 What Synapse Nexus Does
 
-> **Conventional predictors ask: *where will this agent be?***
-> **Synapse Nexus asks: *what is this agent trying to do?* — then derives where they'll be.**
+> **Motion prediction alone isn't enough. Synapse Nexus models *intent* — classifying what an agent is trying to do before predicting where they'll go.**
 
-The decisive architectural insight: an explicit **intent classification gate** (Continue / Cross Road / Turn / Stop) runs *before* trajectory decoding. Conditioning the GRU decoder on both a predicted goal endpoint *and* a discrete intent class constrains the hypothesis space to physically plausible, semantically consistent futures. The result is a system that doesn't just extrapolate motion — it reasons about purpose.
+At its core, Synapse Nexus is an **intent-first pedestrian trajectory predictor**. Before decoding any path coordinates, the model explicitly classifies each agent's behavioural intent into one of four categories: **Continue · Cross Road · Turn · Stop**. That intent label then conditions the trajectory decoder, grounding every predicted path in a physically and semantically consistent goal.
 
-| What Others Do | What We Do |
-|---|---|
-| React to where agent is | Predict where they'll be 3s ahead |
-| Single trajectory output | K=3 confidence-weighted hypotheses |
-| No intent modeling | 4-class intent gate before decoding |
-| Off-road predictions (100%) | Map-compliant loss → 2% off-road |
-| Black box decisions | Attention weights fully visualized |
-| Requires LiDAR hardware | Camera + map annotations only |
+The outcome is a system that doesn't passively extrapolate motion — it actively reasons about purpose, producing predictions that respect road geometry, social context, and agent goals simultaneously.
 
-### 🎯 Our 3 Novel Contributions (No Other Team Has These)
+### 🎯 Three Core Technical Contributions
 
 **1. Intent-First Pipeline**
-We classify the agent's intention BEFORE trajectory decoding. The GRU decoder is conditioned on both the predicted goal AND the intent class. This means the model knows a pedestrian is about to cross a road before it starts predicting path coordinates.
+An `IntentClassifier` module runs ahead of trajectory decoding. Its output — a discrete intent class and a 32-dimensional intent embedding — directly conditions the GRU decoder alongside the predicted goal endpoint. The model understands *why* an agent is moving before it commits to *where*.
 
 **2. Differentiable Map Compliance Loss**
-Using `F.grid_sample`, we differentiably sample map walkability at every predicted trajectory point. During training, non-walkable predictions generate gradient pressure pushing trajectories back onto valid surfaces. Result: OffRoadRate drops from 1.00 → 0.02.
+Every predicted waypoint is evaluated against a BEV map raster using `F.grid_sample`, making the off-road penalty fully differentiable. During training, non-walkable predictions generate gradient pressure that steers trajectories back onto valid surfaces. This reduces OffRoadRate from 1.00 → **0.020** — a 50× improvement.
 
 **3. OccupancyScorer Re-ranking**
-After trajectory decoding, a lightweight MLP scores each of K=3 modes against the map feature vector. Impossible trajectories are penalized at inference time — not just during training. This is the first such two-stage safety filter in this class of predictor.
+After the decoder produces K=3 trajectory hypotheses, a lightweight MLP scores each mode against the map's feature vector. Geometrically implausible trajectories are suppressed at inference time, not just penalised during training — acting as a two-stage safety filter that ensures the highest-probability output is always map-consistent.
+
 
 ---
 
