@@ -3,7 +3,7 @@
 import axios from 'axios'
 import { useAuthStore } from '@/store/authStore'
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+const API = typeof window !== 'undefined' ? '/api/proxy' : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
 
 export function useAuth() {
   const { token, user, isAuthenticated, setAuth, clearAuth } = useAuthStore()

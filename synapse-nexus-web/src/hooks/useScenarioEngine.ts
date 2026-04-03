@@ -6,14 +6,12 @@ import type {
   AlertHistoryEntry, SystemStats, ScenarioState, RiskState,
 } from '@/types/simulation'
 
-// ─── Ego Path (Singapore Onenorth, 20 waypoints, 3000×3000 world) ─────────────
 const EGO_PATH: WorldPos[] = [
   { x: 1480, y: 3000 }, { x: 1480, y: 2500 }, { x: 1480, y: 2000 },
   { x: 1480, y: 1500 }, { x: 1480, y: 1000 }, { x: 1480, y: 500 },
   { x: 1480, y: 0 },
 ]
 
-// Lane Constants
 const LANE_1_X = 1480
 const LANE_2_X = 1520
 const SHOULDER_L = 1455
@@ -21,7 +19,6 @@ const SHOULDER_R = 1545
 const FOOTPATH_L = 1440
 const FOOTPATH_R = 1560
 
-// ─── Path helpers ─────────────────────────────────────────────────────────────
 function buildLengths(path: WorldPos[]): number[] {
   const lens = [0]
   for (let i = 1; i < path.length; i++) {
@@ -49,7 +46,6 @@ function posAtDist(dist: number): { pos: WorldPos; heading: number } {
   return { pos: EGO_PATH[0], heading: 0 }
 }
 
-// Convert ego-relative offset to world coords
 function relToWorld(
   ego: { x: number; y: number; heading: number },
   fwd: number,   // positive = ahead
@@ -107,7 +103,6 @@ function buildTrail(
   return trail
 }
 
-// ─── Scenario metadata ────────────────────────────────────────────────────────
 const SCENARIOS = [
   { 
     name: 'Overtaking Vehicle', 
@@ -144,7 +139,6 @@ function getScenario(elapsed: number): { idx: number; t: number; isGap: boolean 
   return { idx: 0, t: 0, isGap: false }
 }
 
-// ─── Per-scenario vehicle factories ───────────────────────────────────────────
 
 interface ScenarioFrame {
   vehicles: SimVehicle[]
@@ -362,7 +356,6 @@ function scenario4(t: number, ego: { x: number; y: number; heading: number }): S
   return frame
 }
 
-// ─── Main Hook ────────────────────────────────────────────────────────────────
 const INITIAL_STATE: ScenarioState = {
   vehicles: [],
   ego: { x: LANE_1_X, y: 3000, heading: 0, displaySpeed: 45, targetSpeed: 45, braking: false, odometer: 247.3, trip: 0 },
@@ -418,12 +411,10 @@ export function useScenarioEngine() {
       egoDistRef.current += 48 * dt
       const { pos: egoPos, heading: egoHeading } = posAtDist(egoDistRef.current)
 
-      // Scenario timing
       const { idx, t, isGap } = getScenario(elapsed)
       const sc = SCENARIOS[idx]
       const ego = { x: egoPos.x, y: egoPos.y, heading: egoHeading }
 
-      // Compute scenario frame
       let frame: ScenarioFrame
       if (isGap) {
         frame = noFrame(45)
@@ -449,11 +440,9 @@ export function useScenarioEngine() {
         trip: newTrip,
       }
 
-      // Intro Card logic: show for first 3s of scenario
       const showIntroCard = !isGap && t < 3
       const introCardData = showIntroCard ? { title: sc.name, description: sc.desc, scenarioNumber: idx + 1 } : null
 
-      // Luna speech
       if (frame.lunaKey && frame.lunaText && !spokenKeysRef.current.has(frame.lunaKey)) {
         spokenKeysRef.current.add(frame.lunaKey)
         speak(frame.lunaText)

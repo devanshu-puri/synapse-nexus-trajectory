@@ -5,7 +5,7 @@ import { useSimulationStore } from '@/store/simulationStore'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+const API = '/api/proxy'
 
 interface ModelInfo {
   name: string

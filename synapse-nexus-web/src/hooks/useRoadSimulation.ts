@@ -23,7 +23,6 @@ import {
   TrafficAlert,
 } from '@/types/vehicle'
 
-// ─── Constants ────────────────────────────────────────────────────────────────
 const SIMULATION_INTERVAL = 100   // ms
 const NUM_VEHICLES = 12
 const HISTORY_LENGTH = 20
@@ -33,19 +32,16 @@ const FOLLOW_DISTANCE = 25        // meters — desired gap between vehicles
 const ALERT_COOLDOWN = 3000
 const alertCooldowns = new Map<string, number>()
 
-// ─── Normalize angle to [-π, π] ───────────────────────────────────────────────
 function normAngle(a: number): number {
   while (a > Math.PI) a -= 2 * Math.PI
   while (a < -Math.PI) a += 2 * Math.PI
   return a
 }
 
-// ─── Pick random road ──────────────────────────────────────────────────────────
 function randomRoad() {
   return ROAD_NETWORK[Math.floor(Math.random() * ROAD_NETWORK.length)]
 }
 
-// ─── Initialize one traffic vehicle ───────────────────────────────────────────
 function initVehicle(id: string, forceWrongWay = false): Vehicle {
   const typePool: VehicleType[] = ['car', 'car', 'car', 'car', 'truck', 'motorcycle', 'bus', 'car']
   const behaviorPool: DriverBehavior[] = ['normal', 'normal', 'normal', 'aggressive', 'slow', 'speeding']
@@ -94,7 +90,6 @@ function initVehicle(id: string, forceWrongWay = false): Vehicle {
   }
 }
 
-// ─── Wrong-way detection ──────────────────────────────────────────────────────
 function detectWrongWay(v: Vehicle): boolean {
   const road = ROAD_NETWORK.find(r => r.id === v.roadId)
   if (!road || road.direction === 'twoway') return false
@@ -106,7 +101,6 @@ function detectWrongWay(v: Vehicle): boolean {
   return Math.abs(normAngle(v.heading - roadHeading)) > 0.6 * Math.PI
 }
 
-// ─── Relative position in ego reference frame ──────────────────────────────────
 function calcRelativePos(
   v: { lng: number; lat: number; heading: number; closingSpeed: number },
   ego: { lng: number; lat: number; heading: number; lane: number },
@@ -127,7 +121,6 @@ function calcRelativePos(
   return relX < 0 ? 'beside_left' : 'beside_right'
 }
 
-// ─── Threat level ─────────────────────────────────────────────────────────────
 function calcThreat(v: Vehicle): ThreatLevel {
   if (v.isWrongWay && v.relativeToEgo === 'approaching_head_on') return 'critical'
   if (v.ttc > 0 && v.ttc < 2) return 'critical'
@@ -142,7 +135,6 @@ function calcThreat(v: Vehicle): ThreatLevel {
   return 'none'
 }
 
-// ─── Alert generation ─────────────────────────────────────────────────────────
 function maybeAlert(v: Vehicle): TrafficAlert | null {
   const now = Date.now()
   if ((now - (alertCooldowns.get(v.id) ?? 0)) < ALERT_COOLDOWN) return null
@@ -163,7 +155,6 @@ function maybeAlert(v: Vehicle): TrafficAlert | null {
   return null
 }
 
-// ─── Hook ─────────────────────────────────────────────────────────────────────
 export function useRoadSimulation() {
   const { egoVehicle, isPaused, setEgoVehicle, setVehicles, addAlert, tick } =
     useTrafficStore()
@@ -206,13 +197,11 @@ export function useRoadSimulation() {
         const newRoad = ROAD_NETWORK.find(r => r.id === newRoadId) ?? egoRoad
         const pos = getLanePosition(newRoad, newProg, ego.lane)
 
-        // Smooth heading lerp
         const targetHeading = pos.heading
         const currentHeading = ego.heading
         const headingDiff = normAngle(targetHeading - currentHeading)
         const newHeading = currentHeading + headingDiff * 0.15
 
-        // Smooth speed
         const spdDiff = ego.targetSpeed - ego.speed
         const newSpeed = ego.speed + Math.sign(spdDiff) * Math.min(Math.abs(spdDiff), 2)
 
@@ -240,7 +229,6 @@ export function useRoadSimulation() {
         const delta = (v.speed / 3.6) * DT / roadLen
         let newProg = v.roadProgress + delta * dir
 
-        // Recycle onto new road when reaching end
         let newRoad = road
         if (newProg > 1 || newProg < 0) {
           newRoad = randomRoad()
@@ -266,7 +254,6 @@ export function useRoadSimulation() {
           finalLat = snapped.lat
         }
 
-        // History
         const hist = [{ lng: v.lng, lat: v.lat }, ...v.positionHistory].slice(0, HISTORY_LENGTH)
 
         // Distance & closing speed
@@ -275,7 +262,6 @@ export function useRoadSimulation() {
         const prevDist = haversineM(v.lng, v.lat, ego.lng, ego.lat)
         const closingSpeed = ((prevDist - dist) / DT) * 3.6 // km/h
 
-        // TTC
         const closingMs = closingSpeed / 3.6
         const ttc = closingMs > 0.5 ? dist / closingMs : Infinity
 
@@ -310,7 +296,6 @@ export function useRoadSimulation() {
           targetSpeed = newRoad.speedLimit * sMod * bMod * (0.85 + Math.random() * 0.35)
         }
 
-        // Smooth speed
         const spdDiff = targetSpeed - v.speed
         const newSpeed = Math.max(0, v.speed + Math.sign(spdDiff) * Math.min(Math.abs(spdDiff), 3))
 

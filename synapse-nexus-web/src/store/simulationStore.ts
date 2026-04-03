@@ -29,7 +29,7 @@ const SINGAPORE_CENTER = { lng: 103.8, lat: 1.35 }
 function createInitialAgent(id: number, type: string): Agent {
   return {
     id: `agent-${id}`,
-    position: { x: 0, y: id * 100 }, // Will be reset on first tick
+    position: { x: 0, y: id * 100 },
     velocity: { x: 0, y: 0 },
     heading: 0,
     risk: 'safe',
@@ -45,7 +45,6 @@ function createInitialAgent(id: number, type: string): Agent {
   }
 }
 
-// Fixed set of 8 realistic scenario agents
 const initialAgents = [
   createInitialAgent(0, 'Wrong-Way Vehicle'),
   createInitialAgent(1, 'Pedestrian Crossing'),
@@ -62,7 +61,7 @@ export const useSimulationStore = create<SimulationState>()(
     agents: initialAgents,
     egoVehicle: {
       position: { x: 0, y: 0 },
-      speed: 12.0 // 12 m/s = ~43 km/h
+      speed: 12.0
     },
     systemStats: {
       latency: 18,
@@ -72,7 +71,7 @@ export const useSimulationStore = create<SimulationState>()(
     
     updateSimulation: () => {
       const state = get()
-      const dt = 0.5 // 500ms per tick
+      const dt = 0.5
       const egoSpeed = state.egoVehicle.speed
       const newEgoY = state.egoVehicle.position.y + egoSpeed * dt
       
@@ -83,8 +82,6 @@ export const useSimulationStore = create<SimulationState>()(
         let newVelX = agent.velocity.x
         let newVelY = agent.velocity.y
 
-        // --- SCENARIO RECYCLING LOGIC ---
-        // If an agent passes behind the ego vehicle, respawn them far ahead to create a new scenario event
         if (newY < newEgoY - 50 || (agent.position.x === 0 && agent.position.y === 0)) {
           if (agent.id === 'agent-0') {
             // Wrong-way incoming car
@@ -124,21 +121,18 @@ export const useSimulationStore = create<SimulationState>()(
           }
         }
 
-        // --- RISK & TTC (Time-To-Collision) CALCULATION ---
-        const dx = newX - 0 // Ego is always at x=0
+        const dx = newX
         const dy = newY - newEgoY
         const dist = Math.sqrt(dx * dx + dy * dy)
         
-        // Relative velocity approach
-        const relVx = newVelX - 0 // Ego purely moves in Y
+        const relVx = newVelX
         const relVy = newVelY - egoSpeed
         
         let risk: 'safe' | 'warning' | 'danger' = 'safe'
         let ttc = 999
-        let alertContext = agent.intent
 
         const dotProduct = dx * relVx + dy * relVy
-        if (dotProduct < 0) { // closing distance
+        if (dotProduct < 0) {
           const relSpeed = Math.sqrt(relVx*relVx + relVy*relVy)
           if (relSpeed > 0) {
             ttc = dist / relSpeed
@@ -158,11 +152,8 @@ export const useSimulationStore = create<SimulationState>()(
           }
         }
 
-        // Force danger if extremely close
         if (dist < 12 && Math.abs(dx) < 4) risk = 'danger'
 
-        // --- TRAJECTORY GENERATION ---
-        // Generate realistic predicted paths based on intent
         const trajectoryModes = []
         for (let m = 0; m < 3; m++) {
           const points = []
@@ -193,7 +184,6 @@ export const useSimulationStore = create<SimulationState>()(
         }
       })
       
-      // --- LUNA ALERT MANAGER ---
       let lunaAlert = 'All systems nominal. Road clear.'
       const dangerAgents = updatedAgents.filter(a => a.risk === 'danger')
       const warningAgents = updatedAgents.filter(a => a.risk === 'warning')

@@ -12,7 +12,7 @@ import {
 } from 'recharts'
 import axios from 'axios'
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+const API = '/api/proxy'
 
 type MetricType = 'loss' | 'minADE_3' | 'minFDE_3' | 'OffRoadRate'
 

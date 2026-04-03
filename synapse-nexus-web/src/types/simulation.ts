@@ -1,5 +1,3 @@
-// ─── Driving Simulation Type Definitions ──────────────────────────────────────
-
 export type RiskState = 'safe' | 'warning' | 'danger'
 export type VehicleKind = 'car' | 'truck' | 'motorcycle' | 'pedestrian'
 
@@ -14,27 +12,27 @@ export interface SimVehicle {
   kind: VehicleKind
   x: number
   y: number
-  heading: number       // radians; 0=up(−y), π/2=right(+x)
+  heading: number
   risk: RiskState
   visible: boolean
   trail: WorldPos[]
-  traj1: WorldPos[]     // primary trajectory (solid)
-  traj2: WorldPos[]     // alternate (dashed, lower opacity)
-  traj3: WorldPos[]     // third option (very faint)
-  braking: boolean      // show brake lights
+  traj1: WorldPos[]
+  traj2: WorldPos[]
+  traj3: WorldPos[]
+  braking: boolean
   isWrongWay: boolean
-  showV2N: boolean      // V2N network broadcast icon
+  showV2N: boolean
 }
 
 export interface EgoState {
   x: number
   y: number
   heading: number
-  displaySpeed: number  // km/h (smoothly lerped)
-  targetSpeed: number   // km/h target
+  displaySpeed: number
+  targetSpeed: number
   braking: boolean
-  odometer: number      // total km traveled
-  trip: number          // km since start
+  odometer: number
+  trip: number
 }
 
 export interface ActiveAlert {
@@ -42,15 +40,15 @@ export interface ActiveAlert {
   severity: 'warning' | 'danger'
   title: string
   detail: string
-  ttc: number | null    // Time-to-collision seconds, null if N/A
-  createdAt: number     // performance.now()
+  ttc: number | null
+  createdAt: number
 }
 
 export interface AlertHistoryEntry {
   id: string
   title: string
   detail: string
-  timestamp: number     // Date.now()
+  timestamp: number
   status: 'active' | 'resolved'
   severity: 'warning' | 'danger' | 'info'
 }
@@ -58,10 +56,10 @@ export interface AlertHistoryEntry {
 export interface SystemStats {
   agentCount: number
   intentAccuracy: number
-  scenarioIndex: number     // 1–4
+  scenarioIndex: number
   scenarioName: string
-  scenarioProgress: number  // 0–1
-  scenarioTimeRemaining: number // seconds
+  scenarioProgress: number
+  scenarioTimeRemaining: number
 }
 
 export interface ScenarioState {

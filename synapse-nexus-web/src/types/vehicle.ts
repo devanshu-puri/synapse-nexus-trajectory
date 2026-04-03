@@ -1,5 +1,3 @@
-// ─── Vehicle Type Definitions ──────────────────────────────────────────────────
-
 export type VehicleType = 'car' | 'truck' | 'motorcycle' | 'bus' | 'emergency'
 
 export type ThreatLevel = 'none' | 'low' | 'medium' | 'high' | 'critical'
@@ -32,23 +30,23 @@ export interface Vehicle {
   id: string
   type: VehicleType
   roadId: string
-  roadProgress: number       // 0–1 along polyline
-  lane: number               // 0 = rightmost
+  roadProgress: number
+  lane: number
   lng: number
   lat: number
-  heading: number            // radians
-  speed: number              // km/h
-  acceleration: number       // m/s²
-  targetSpeed: number        // km/h
+  heading: number
+  speed: number
+  acceleration: number
+  targetSpeed: number
   behavior: DriverBehavior
   isWrongWay: boolean
   relativeToEgo: RelativePosition
   threatLevel: ThreatLevel
-  ttc: number                // seconds, Infinity = safe
-  distance: number           // meters to ego
-  closingSpeed: number       // km/h, positive = approaching
-  color: string              // hex
-  size: { width: number; length: number } // meters
+  ttc: number
+  distance: number
+  closingSpeed: number
+  color: string
+  size: { width: number; length: number }
   positionHistory: Array<{ lng: number; lat: number }>
   predictedPath: Array<{ lng: number; lat: number }>
 }
@@ -57,14 +55,14 @@ export interface EgoVehicle {
   lng: number
   lat: number
   heading: number
-  speed: number              // km/h
+  speed: number
   acceleration: number
   roadId: string
   roadProgress: number
   lane: number
   targetSpeed: number
-  plannedRoute: string[]     // ordered road IDs
-  routeProgress: number      // 0–1 overall
+  plannedRoute: string[]
+  routeProgress: number
   destination: [number, number] | null
 }
 
@@ -90,7 +88,6 @@ export interface TrafficAlert {
   action: string
 }
 
-// Vehicle config maps
 export const VEHICLE_COLORS: Record<VehicleType, string> = {
   car: '#4A9EFF',
   truck: '#F5A623',
