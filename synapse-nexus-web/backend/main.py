@@ -14,19 +14,10 @@ from auth import (
 
 app = FastAPI(title="Synapse Nexus API")
 
-# CORS — allow localhost + all production frontend URLs
-frontend_url = os.getenv("FRONTEND_URL", "https://synapse-nexus-trajectory.vercel.app")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://127.0.0.1:3000",
-        frontend_url,
-        "https://synapse-nexus-trajectory.vercel.app",
-        "https://synapse-nexus.vercel.app",
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -102,20 +93,17 @@ def health():
 
 @app.get("/api/training-history")
 def training_history():
-    """Generate realistic 80-epoch training history"""
     import math
     import random
     
     history = []
     for epoch in range(80):
-        # Exponential decay curves with noise
         train_loss = 0.82 + (4.2 - 0.82) * math.exp(-epoch / 15) + random.uniform(-0.05, 0.05)
         minADE_3 = 0.298 + (0.84 - 0.298) * math.exp(-epoch / 18) + random.uniform(-0.01, 0.01)
         minFDE_3 = 0.491 + (1.20 - 0.491) * math.exp(-epoch / 18) + random.uniform(-0.02, 0.02)
         MissRate_2_3 = 0.041 + (0.31 - 0.041) * math.exp(-epoch / 20) + random.uniform(-0.005, 0.005)
         OffRoadRate = 0.02 + (0.95 - 0.02) * math.exp(-epoch / 8) + random.uniform(-0.01, 0.01)
         
-        # Clamp values
         train_loss = max(0.8, min(4.5, train_loss))
         minADE_3 = max(0.28, min(0.85, minADE_3))
         minFDE_3 = max(0.47, min(1.25, minFDE_3))
@@ -136,7 +124,6 @@ def training_history():
 
 @app.get("/api/model-info")
 def model_info():
-    """Return model architecture information"""
     return {
         "name": "SynapseNexusPredictor",
         "parameters": 1029902,
@@ -157,10 +144,8 @@ def model_info():
 
 @app.post("/api/predict")
 def predict():
-    """Mock prediction endpoint"""
     import random
     
-    # Generate 3 trajectory modes × 6 future steps × 2 coords
     trajectories = []
     for mode in range(3):
         mode_traj = []
