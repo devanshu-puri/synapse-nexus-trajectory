@@ -29,6 +29,15 @@ At its core, Synapse Nexus is an **intent-first pedestrian trajectory predictor*
 
 The outcome is a system that doesn't passively extrapolate motion — it actively reasons about purpose, producing predictions that respect road geometry, social context, and agent goals simultaneously.
 
+| Conventional Approach | Synapse Nexus |
+|---|---|
+| Reacts to current agent position | Predicts 3s ahead with goal-conditioned decoding |
+| Single deterministic trajectory | K=3 confidence-weighted hypotheses |
+| No intent modelling | 4-class intent gate before trajectory decoding |
+| No map awareness during training | Differentiable map compliance → 2% off-road rate |
+| Opaque internal representations | Attention weights exposed for full interpretability |
+| Requires LiDAR or HD sensor arrays | Camera + map annotations only |
+
 ### 🎯 Three Core Technical Contributions
 
 **1. Intent-First Pipeline**
